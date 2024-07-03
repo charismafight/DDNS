@@ -13,6 +13,7 @@ namespace QP_DDNS
 {
     public partial class Service1 : ServiceBase
     {
+        private string currentIp = string.Empty;
         private bool _stopping = false;
         public Service1()
         {
@@ -32,16 +33,17 @@ namespace QP_DDNS
 
                     // 刷新
                     var ip = IPHelper.GetIP();
-                    if (!string.IsNullOrWhiteSpace(ip))
+                    if (ip != currentIp)
                     {
                         AliCloudHelper.Update("vol", "825193460829445120", ip, "A");
                         AliCloudHelper.Update("demo", "734571082433774592", ip, "A");
                         AliCloudHelper.Update("sample", "724099217879096320", ip, "A");
                         AliCloudHelper.Update("qp", "21512307816865792", ip, "A");
                         AliCloudHelper.Update("remote", "3392179402148864", ip, "A");
+                        currentIp = ip;
                     }
 
-                    Thread.Sleep(10000);
+                    Thread.Sleep(1000);
                 }
             }).Start();
         }
